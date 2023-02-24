@@ -2,6 +2,7 @@ package villagegaulois;
 
 import personnages.Gaulois;
 
+
 public class Etal {
 	private Gaulois vendeur;
 	private String produit;
@@ -17,6 +18,10 @@ public class Etal {
 		return vendeur;
 	}
 
+		public int getQuantiteDebutMarche() {
+			return quantiteDebutMarche;
+		}
+		
 	public void occuperEtal(Gaulois vendeur, String produit, int quantite) {
 		this.vendeur = vendeur;
 		this.produit = produit;
@@ -25,8 +30,11 @@ public class Etal {
 		etalOccupe = true;
 	}
 
-	public String libererEtal() {
+	public String libererEtal()throws NullPointerException {
 		etalOccupe = false;
+		if(vendeur==null) {
+			throw new NullPointerException("L'etal n'est pas occupe");
+		}
 		StringBuilder chaine = new StringBuilder(
 				"Le vendeur " + vendeur.getNom() + " quitte son étal, ");
 		int produitVendu = quantiteDebutMarche - quantite;
@@ -48,7 +56,16 @@ public class Etal {
 	}
 
 	public String acheterProduit(int quantiteAcheter, Gaulois acheteur) {
-		if (etalOccupe) {
+		  	if(acheteur==null) {
+		  		throw new NullPointerException("l’acheteur ne doit pas être null");
+		  	}
+		  	else if (quantiteAcheter<0) {
+		  		throw new IllegalArgumentException("la quantité doit être positive");
+		  	}
+		  	else if(!etalOccupe) {
+		  		throw new IllegalStateException("l’étal doit être occupé");
+		  	}
+		  	
 			StringBuilder chaine = new StringBuilder();
 			chaine.append(acheteur.getNom() + " veut acheter " + quantiteAcheter
 					+ " " + produit + " à " + vendeur.getNom());
@@ -70,8 +87,8 @@ public class Etal {
 						+ vendeur.getNom() + "\n");
 			}
 			return chaine.toString();
-		}
-		return null;
+		
+		
 	}
 
 	public boolean contientProduit(String produit) {
